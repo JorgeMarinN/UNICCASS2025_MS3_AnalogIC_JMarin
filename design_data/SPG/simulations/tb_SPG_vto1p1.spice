@@ -1,0 +1,74 @@
+** sch_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/SPG/tb_SPG_vto1p1.sch
+**.subckt tb_SPG_vto1p1
+VCC VCC GND 1.2
+VSS VSS GND 0
+x1 VCC VSS VFE VIN VRE SPG_vto1p1
+VIN1 VIN VSS PULSE(0 1.2 0n 1n 1n 100n 200n)
+**** begin user architecture code
+
+
+.control
+save all
+tran 50p 380n
+plot V(VFE) V(VRE)+2 V(VIN)+4
+.endc
+
+.measure tran tdelayfe
++ TRIG tran1.V(VFE) TD=0u VAL=0.6 RISE=1
++ TARG tran1.V(VFE) TD=0u VAL=0.6 FALL=1
+
+.measure tran tdelayre
++ TRIG tran1.V(VRE) TD=0u VAL=0.6 RISE=1
++ TARG tran1.V(VRE) TD=0u VAL=0.6 FALL=1
+
+
+
+
+.param corner=0
+
+.if (corner==0)
+.lib /opt/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib mos_tt
+.lib /opt/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerMOShv.lib mos_tt
+.lib /opt/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerRES.lib res_typ
+.lib /opt/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerCAP.lib cap_typ
+.endif
+
+.include /opt/pdks/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  SPG_vto1p1.sym # of pins=5
+** sym_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/SPG/SPG_vto1p1.sym
+** sch_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/SPG/SPG_vto1p1.sch
+.subckt SPG_vto1p1 VCC VSS VFE VIN VRE
+*.iopin VIN
+*.iopin VFE
+*.iopin VRE
+*.iopin VCC
+*.iopin VSS
+x2 dly_in VCC VSS net2 sg13g2_inv_1
+x3 net3 VCC VSS dly_in sg13g2_inv_1
+x4 dly_out VCC VSS net1 sg13g2_inv_1
+x5 VIN VCC VSS net3 sg13g2_inv_2
+x7 net2 dly_out VCC VSS VFE sg13g2_and2_2
+x8 net1 dly_in VCC VSS VRE sg13g2_and2_2
+x9 VCC VSS dly_in dly_out large_delay_vto1p1
+.ends
+
+
+* expanding   symbol:  ../large_delay/large_delay_vto1p1.sym # of pins=4
+** sym_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/large_delay/large_delay_vto1p1.sym
+** sch_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/large_delay/large_delay_vto1p1.sch
+.subckt large_delay_vto1p1 VCC VSS VIN VOUT
+*.iopin VIN
+*.iopin VOUT
+*.iopin VCC
+*.iopin VSS
+x1[0] VIN VCC VSS n2 sg13g2_dlygate4sd3_1
+x1[1] n2 VCC VSS n3 sg13g2_dlygate4sd3_1
+x1[2] n3 VCC VSS VOUT sg13g2_dlygate4sd3_1
+.ends
+
+.GLOBAL GND
+.end

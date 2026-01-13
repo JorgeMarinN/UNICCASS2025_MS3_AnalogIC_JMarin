@@ -1,0 +1,6 @@
+** sch_path: /home/designer/shared/OS_AnalogIC_UCLouvain_Oct2025/design_data/transmission_gate.sch
+.subckt transmission_gate B GN GP A BP BN
+*.PININFO B:B GN:B A:B GP:B BN:B BP:B
+M1 A GN B BN sg13_lv_nmos w=10u l=0.13u ng=1 m=1
+M2 A GP B BP sg13_lv_pmos w=20u l=0.13u ng=2 m=1
+.ends

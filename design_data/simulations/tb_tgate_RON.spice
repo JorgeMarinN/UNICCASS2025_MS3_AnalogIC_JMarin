@@ -1,0 +1,56 @@
+** sch_path: /home/designer/shared/UNICCASS2025_MS3_AnalogIC_JMarin/design_data/tb_tgate_RON.sch
+**.subckt tb_tgate_RON V_in
+*.iopin V_in
+x1 net1 vdd GND V_in vdd GND transmission_gate
+I0 V_out1 GND {Iload}
+Vp2 net1 V_out1 0
+.save i(vp2)
+Vin V_in GND 0.1
+Vdd vdd GND 1.2
+**** begin user architecture code
+
+
+.param temp=27
+.param Iload=1m
+*.param m1_w=10u
+*.param m2_w=10u
+.control
+save all
+*dc I0 -10m 10m 11u
+dc Vin 0 1.2 0.05
+let Ron=(V(V_in)-V(V_out1))/I(Vp2)
+*write dc_RON.raw
+plot ron
+
+.endc
+
+
+
+
+.param corner=0
+
+.if (corner==0)
+.lib cornerMOSlv.lib mos_tt
+.lib cornerRES.lib res_typ
+.lib cornerCAP.lib cap_typ
+.endif
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  transmission_gate.sym # of pins=6
+** sym_path: /home/designer/shared/UNICCASS2025_MS3_AnalogIC_JMarin/design_data/transmission_gate.sym
+** sch_path: /home/designer/shared/UNICCASS2025_MS3_AnalogIC_JMarin/design_data/transmission_gate.sch
+.subckt transmission_gate B GN GP A BP BN
+*.iopin B
+*.iopin GN
+*.iopin A
+*.iopin GP
+*.iopin BN
+*.iopin BP
+XM1 A GN B BN sg13_lv_nmos w=10u l=0.13u ng=1 m=1
+XM2 A GP B BP sg13_lv_pmos w=20u l=0.13u ng=2 m=1
+.ends
+
+.GLOBAL GND
+.end

@@ -1,0 +1,69 @@
+** sch_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/t-tb_gate_lv_isweep_chipathon.sch
+**.subckt t-tb_gate_lv_isweep_chipathon V_in
+*.iopin V_in
+Vpow vdd GND 1.2
+Vin V_in GND 0.1
+I0 V_out1 net2 {Iload}
+Vp2 net1 V_out1 0
+.save i(vp2)
+Vin1 net2 GND 0.1
+x1 net1 vdd GND V_in vdd GND transmission_gate
+**** begin user architecture code
+
+
+
+.param temp=27
+.param mn_w=36.0u
+.param mp_w=90.0u
+
+.param temp=27
+.param Iload=500u
+.control
+save all
+
+set num_threads 1
+dc I0 -5m 5m 1.1u
+
+let Ron=(V(V_in)-V(V_out1))/I(Vp2)
+meas dc Ronmax max Ron
+echo results_sweep_begin
+print Ronmax
+echo results_sweep_end
+set color0=white
+set color1=black
+set color2=red
+set color3=blue
+set color4=green
+plot Ron title 'RON resistance' xlabel 'current' ylabel 'Ron'
+.endc
+
+
+
+
+.param corner=0
+
+.if (corner==0)
+.lib cornerMOSlv.lib mos_tt
+.lib cornerRES.lib res_typ
+.lib cornerCAP.lib cap_typ
+.endif
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  transmission_gate.sym # of pins=6
+** sym_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/GF180/transmission_gate.sym
+** sch_path: /home/designer/shared/OS_AnalogIC_VLSISOC_Oct2025/design_data/GF180/transmission_gate.sch
+.subckt transmission_gate B GN GP A BP BN
+*.iopin B
+*.iopin GN
+*.iopin A
+*.iopin GP
+*.iopin BN
+*.iopin BP
+*  M1 -  nfet_03v3  IS MISSING !!!!
+*  M2 -  pfet_03v3  IS MISSING !!!!
+.ends
+
+.GLOBAL GND
+.end
